@@ -1,0 +1,73 @@
+@charset "utf-8";
+/* CSS Document */
+#root{
+	border-right: 1px solid;
+	border-left: 1px solid;
+	min-height: 480px;
+	max-width: 1px;
+	border-bottom: 1px solid;
+	max-width: 480px;
+	margin-top: 10px;
+	
+}
+#top_left{
+	border-top: 1px solid;
+	max-width: 200px;
+	min-height: 1px;
+	margin-top: -18px;
+}
+#top_right{
+	
+	border-top: 1px solid;
+	max-width: 200px;
+	min-height: 1px;
+	margin-left: 280px;
+	margin-top: -2px;
+}
+#title
+{
+	
+	max-width: 480px;
+	text-align: center;
+
+}
+#are_1
+{
+	margin-left: 2.5px;
+	border-right: 1px solid;
+	border-left: 1px solid;
+	min-height: 110px;
+	max-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	max-width: 470px;
+	margin-top: -20px;
+}
+#are_1_left
+{
+	margin-top: 10px;
+	border-top: 1px solid;
+	max-width: 80px;
+	min-height: 1px;
+	
+}
+#are_1_right
+{
+	border-top: 1px solid;
+	max-width: 320px;
+	min-height: 1px;
+	margin-left: 150px;
+	margin-top: -2px;
+}
+#are_1_title
+{
+	max-width: 240px;
+	text-align: center;
+}
+
+.buttom{
+	margin-left: 20px;
+	margin-top: 10px;
+	min-width: 120px
+}
+

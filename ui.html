@@ -1,0 +1,39 @@
+<p style="text-align: center">ExportCSDFile</p>
+
+<div name="image" id="dropbox" style="min-width:80px;min-height:20px;border:3px solid silver;"><label id="tips">请拖拽文件路径文件到此处，如果还没有路径文件请运行文件夹下的</label></div>
+
+<script>
+  document.addEventListener("dragenter",function(e){
+    document.getElementById("tips").style.display="none"
+  })
+  dropbox.addEventListener("dragenter",function(e){
+    e.stopPropagation();  
+    e.preventDefault();
+
+  },false)
+  dropbox.addEventListener("dragover", function(e){  
+    e.stopPropagation();  
+    e.preventDefault();  
+}, false);  
+  dropbox.addEventListener("drop",function(e){
+    e.stopPropagation();  
+    e.preventDefault();
+  
+    document.getElementById("tips").style.display="inline"
+    document.getElementById("dropbox").style.textAlign="center"
+    document.getElementById("tips").textContent=e.dataTransfer.files[0].name
+    var reader =new FileReader();
+    reader.onload=function()
+  {
+    if(reader.result)
+    {
+      json_content=JSON.parse(reader.result);
+      console.warn(json_content);
+      //parent.postMessage({pluginMessage:json_content},'*')
+    }
+  }
+  reader.readAsText(e.dataTransfer.files[0])
+
+    
+  },false)
+</script>

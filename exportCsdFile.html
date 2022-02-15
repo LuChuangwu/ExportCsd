@@ -1,0 +1,232 @@
+<style type="text/css">
+
+#root{
+	border-right: 1px solid;
+	border-left: 1px solid;
+	min-height: 350px;
+	max-width: 1px;
+	border-bottom: 1px solid;
+	max-width: 480px;
+	margin-top: 10px;
+	
+}
+#top_left{
+	border-top: 1px solid;
+	max-width: 200px;
+	min-height: 1px;
+	margin-top: -18px;
+}
+#top_right{
+	
+	border-top: 1px solid;
+	max-width: 200px;
+	min-height: 1px;
+	margin-left: 280px;
+	margin-top: -2px;
+}
+#title
+{
+	
+	margin-left: 205px
+
+}
+#are_1
+{
+	margin-left: 5px;
+	border-right: 1px solid;
+	border-left: 1px solid;
+	min-height: 110px;
+	max-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	max-width: 450px;
+	margin-top: -20px;
+}
+#are_1_left
+{
+	margin-top: 10px;
+	border-top: 1px solid;
+	max-width: 80px;
+	min-height: 1px;
+	
+}
+#are_1_right
+{
+	border-top: 1px solid;
+	max-width: 320px;
+	min-height: 1px;
+	margin-left: 150px;
+	margin-top: -2px;
+}
+#are_1_title
+{
+	max-width: 240px;
+	text-align: center;
+}
+
+.buttom{
+	margin-left: 20px;
+	margin-top: 10px;
+	min-width: 120px
+}
+
+	.div_mar{
+		margin-top: 10px;
+	}
+</style>
+<div id ="title"><label>ExportFile</label></div>
+<div id="root">
+<div id="top_left"></div>
+<div id="top_right"></div>
+<div class="div_mar" style="border: 1px solid;max-width: 450px;margin-left: 5px;min-height: 60px;">
+	<label style="margin-left: 5px;margin-top: 10px" >选择需要导出的画布：</label><select id="select_frame" style="min-width: 270px" ><option>NULL</option></select>
+	<label style="margin-left: 5px;margin-top: 10px">画布名称：</label><input  type="text" id="file_name" value="Layer" style="margin-left: 80px;min-width: 270px">
+	<label style="margin-left: 5px;margin-top: 10px">当前节点的类型：</label><input  type="text" id=node_type value="未选中节点" style="margin-left: 32px; min-width:270px" readonly >
+</div>
+
+<div class="div_mar">
+<div   id="are_1_title"><label>创建节点</label></div>
+ <div id="are_1">
+	<div id="are_1_left"></div>
+	<div id="are_1_right"></div>
+	<button class="buttom">创建基础器</button>
+	<button class="buttom">创建列表容器</button>
+	<button class="buttom">创建翻页容器</button>
+	<button class="buttom">创建滚动器</button>
+	<button class="buttom">创建按钮</button>
+	<button class="buttom">创建复选框</button>
+ </div>
+</div>
+<div class="div_mar">
+<div   id="are_1_title"><label>标记节点</label></div>
+ <div id="are_1">
+	<div id="are_1_left"></div>
+	<div id="are_1_right"></div>
+	<div id="button_area">
+	<button class="buttom" id="mark_panel" value="PanelObjectData,vessel">标记成基础器</button>
+	<button class="buttom" id="mark_list"value="ListViewObjectData,vessel">标记成列表容器</button>
+	<button class="buttom" id="mark_page" value="PageViewObjectData,vessel" >标记成翻页容器</button>
+	<button class="buttom" id="mark_scroll" value="ScrollViewObjectData,vessel">标记成滚动容器</button>
+	<button class="buttom" id="mark_button" value="ButtonObjectData,node">标记成按钮</button>
+	<button class="buttom" id="mark_check" value="CheckBoxObjectData,node">标记成复选框</button>
+	<button class="buttom" id="mark_img" value="ImageViewObjectData,node">标记成图片</button>
+	<button class="buttom" id="mark_auton">自动标记</button>
+	</div>
+ </div>
+</div>
+	
+</div>
+<div><button id="export" style="min-width:350px;min-height: 30px; margin-left: 50px;margin-top: 10px">导出CSD文件</button></div>
+
+<script>
+
+function reqListener () {
+  var json =JSON.parse(this.responseText);
+  parent.postMessage({ pluginMessage:{type:"res_lib",value:json}}, '*')
+  //console.log(json);
+}
+
+var oReq = new XMLHttpRequest();
+oReq.addEventListener("load", reqListener);
+oReq.open("GET", "https://raw.githubusercontent.com/LuChuangwu/Reslib/main/res_report.json");
+oReq.send();
+
+
+var selecter=document.getElementById("select_frame");
+	
+MarkTag();
+window.setInterval(function(){parent.postMessage({ pluginMessage:{type: "GetFrame",value:""}}, '*')},200);
+document.getElementById("export").onclick=()=>{parent.postMessage({ pluginMessage:{type:"ExportFrame",value:[selecter[selecter.selectedIndex].textContent,document.getElementById("file_name").value]}}, '*')}
+
+	//eval("Test()")
+	
+	onmessage=(msg)=>
+	{
+		
+		var msg_value=SplitMessage(msg)
+
+
+		 if(msg_value.type=="1002")
+		{
+			
+			document.getElementById("node_type").value=msg_value.value;
+
+		}
+		if(msg_value.type=="1001")
+		{
+			
+			document.getElementById("select_frame").length = 0;
+			SetSeletValue(msg_value.value);
+		}
+		if(msg_value.type=="1003")
+		{
+			
+			ExportCsdFile(msg_value.value)
+
+		}
+		
+	
+
+	}
+	
+	function SetSeletValue(optio_txte)
+	{
+
+		
+		var new_value=optio_txte.split(',');
+		for(var i=0;i<new_value.length;i++)
+		{
+			var option=document.createElement("option");
+			option.textContent=new_value[i];
+			option.id=new_value[i];
+			selecter.add(option,null)
+
+
+		}
+		
+
+		
+	
+	}
+
+	function MarkTag()
+	{
+		
+		var button_list =document.getElementById("button_area").children;
+		
+		for (let index = 0; index < button_list.length; index++) {
+			button_list[index].onclick=()=>{
+				
+				parent.postMessage({ pluginMessage:{type:"MarkTab",value:button_list[index].value}}, '*')
+
+			}
+			
+		}
+	}
+
+	function ExportCsdFile(value)
+	{
+		var fullPath=document.getElementById("file_name").value+".csd"; 
+		var link = document.createElement("a")
+		link.download=fullPath;
+		link.style.display='none';
+		var blob = new Blob([value]);
+		link.href=URL.createObjectURL(blob);
+		document.body.appendChild(link);
+		link.click();
+	}
+
+	function SplitMessage(msg)
+	{
+		var msg_info={
+			type:"",
+			value:""
+		}
+		msg_info.type=msg.data.pluginMessage.split(':')[0];
+		msg_info.value =msg.data.pluginMessage.split(':')[1];
+		return msg_info;
+	}
+
+</script>
+
+
